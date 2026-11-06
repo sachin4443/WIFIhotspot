@@ -40,3 +40,17 @@ secrets.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Additional secret / local-only files
+appsettings.Local.json
+appsettings.Staging.json
+*.p12
+*.cer
+*.crt
+*.secrets.json
+user-secrets/
+
+# Local databases and archives
+*.db
+*.sqlite
+*.zip
