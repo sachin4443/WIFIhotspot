@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\NxtHotspot.Domain\NxtHotspot.Domain.csproj" />
+  </ItemGroup>
+</Project>

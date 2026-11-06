@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\NxtHotspot.RadiusProtocol\NxtHotspot.RadiusProtocol.csproj" />
+    <ProjectReference Include="..\..\Backend\NxtHotspot.Application\NxtHotspot.Application.csproj" />
+    <ProjectReference Include="..\..\Backend\NxtHotspot.Domain\NxtHotspot.Domain.csproj" />
+  </ItemGroup>
+</Project>

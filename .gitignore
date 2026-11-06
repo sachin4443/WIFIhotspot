@@ -1,0 +1,42 @@
+# Build output
+bin/
+obj/
+publish/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+.vs/
+.idea/
+.vscode/
+TestResults/
+*.trx
+coverage/
+
+# Node / frontend
+node_modules/
+dist/
+.vite/
+npm-debug.log*
+
+# Logs and temp files
+logs/
+*.log
+*.tmp
+*.bak
+Database/Scripts/migrate.sql
+
+# Secrets - never commit
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+appsettings.Production.json
+secrets.json
+*.pfx
+*.key
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db

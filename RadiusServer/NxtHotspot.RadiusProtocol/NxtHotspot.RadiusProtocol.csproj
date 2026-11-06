@@ -1,0 +1,3 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Pure protocol library: no database, no sockets, no external dependencies. -->
+</Project>
