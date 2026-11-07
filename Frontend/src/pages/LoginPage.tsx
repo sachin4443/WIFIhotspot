@@ -12,10 +12,12 @@ const USERNAME_MAX = 50;
 const PASSWORD_MAX = 128;
 
 const FEATURES = [
-  { icon: FiRadio, title: 'RADIUS authentication & accounting', text: 'Centralised AAA for every hotspot router you manage.' },
-  { icon: FiWifi, title: 'Built for every venue', text: 'ISPs, hotels, campuses, enterprises and public Wi-Fi operators.' },
+  { icon: FiRadio, title: 'Custom RADIUS engine', text: 'Authentication, accounting and session control for MikroTik hotspots.' },
+  { icon: FiWifi, title: 'Venue-aware sign-in', text: 'Mobile OTP, hotel room login, student and employee credentials.' },
   { icon: FiShield, title: 'Multi-tenant by design', text: 'Organization isolation, role-based access and full audit trail.' },
 ];
+
+const VENUES = ['ISP', 'Hotel', 'School', 'College', 'University', 'Enterprise', 'Public Wi-Fi', 'Hospital', 'Café', 'Mall', 'Transport'];
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -55,45 +57,51 @@ export function LoginPage() {
 
   return (
     <div className="nxt-login">
-      <section className="nxt-login-hero d-none d-lg-flex">
+      <section className="nxt-login-aside d-none d-lg-flex">
         <div className="d-flex align-items-center gap-3">
-          <BrandMark size={44} />
+          <BrandMark size={40} />
           <div>
-            <div className="h5 fw-bold mb-0 text-white">NXT Hotspot</div>
-            <div className="small nxt-login-hero-muted">Wi-Fi hotspot management platform</div>
+            <div className="h5 fw-bold mb-0">NXT Hotspot</div>
+            <div className="fs-sm text-muted-2">Wi-Fi hotspot &amp; RADIUS management</div>
           </div>
         </div>
 
         <div>
-          <h1 className="display-6 fw-bold text-white mb-3">Run your hotspot network from one console.</h1>
-          <p className="lead nxt-login-hero-muted mb-5">
-            Manage organizations, sites, administrators and authentication for every location you serve.
+          <h1 className="fw-bold mb-3" style={{ fontSize: '2.1rem', lineHeight: 1.2 }}>One platform for every hotspot you operate.</h1>
+          <p className="text-muted-2 mb-4" style={{ fontSize: '1.05rem' }}>
+            Organizations, sites, NAS devices, subscribers, packages and sessions — managed from a single, multi-tenant console.
           </p>
-          <ul className="list-unstyled d-grid gap-4 mb-0">
+          <ul className="list-unstyled d-grid gap-3 mb-4">
             {FEATURES.map(({ icon: Icon, title, text }) => (
               <li key={title} className="d-flex gap-3">
                 <span className="nxt-login-feature-icon"><Icon aria-hidden="true" /></span>
                 <span>
-                  <span className="d-block fw-semibold text-white">{title}</span>
-                  <span className="small nxt-login-hero-muted">{text}</span>
+                  <span className="d-block fw-semibold">{title}</span>
+                  <span className="fs-sm text-muted-2">{text}</span>
                 </span>
               </li>
             ))}
           </ul>
+          <div className="nxt-login-types">
+            {VENUES.map((v) => <span key={v} className="nxt-badge neutral">{v}</span>)}
+          </div>
         </div>
 
-        <div className="small nxt-login-hero-muted">© {new Date().getFullYear()} NXT Hotspot</div>
+        <div className="fs-xs text-muted-2">© {new Date().getFullYear()} NXT Hotspot</div>
       </section>
 
       <section className="nxt-login-panel">
         <div className="nxt-login-card">
           <div className="d-flex d-lg-none align-items-center gap-2 mb-4">
             <BrandMark size={36} />
-            <span className="h5 fw-bold mb-0">NXT Hotspot</span>
+            <div>
+              <div className="h5 fw-bold mb-0">NXT Hotspot</div>
+              <div className="fs-xs text-muted-2">Wi-Fi hotspot &amp; RADIUS management</div>
+            </div>
           </div>
 
-          <h2 className="h3 fw-bold mb-1">Sign in</h2>
-          <p className="text-body-secondary mb-4">Use your administrator account to continue.</p>
+          <h2 className="h3 fw-bold mb-1">Sign in to your console</h2>
+          <p className="text-muted-2 mb-4">Platform, organization and site administrators sign in here.</p>
 
           {error && (
             <div className="alert alert-danger d-flex align-items-start gap-2 py-2" role="alert">
@@ -104,7 +112,7 @@ export function LoginPage() {
 
           <form noValidate onSubmit={onSubmit}>
             <div className="mb-3">
-              <label htmlFor="username" className="form-label fw-medium">Username</label>
+              <label htmlFor="username" className="form-label">Username</label>
               <div className="input-group has-validation">
                 <span className="input-group-text"><FiUser aria-hidden="true" /></span>
                 <input
@@ -127,7 +135,7 @@ export function LoginPage() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="password" className="form-label fw-medium">Password</label>
+              <label htmlFor="password" className="form-label">Password</label>
               <div className="input-group has-validation">
                 <span className="input-group-text"><FiLock aria-hidden="true" /></span>
                 <input
@@ -155,7 +163,7 @@ export function LoginPage() {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2" disabled={submitting}>
+            <button type="submit" className="btn btn-primary w-100 py-2 mt-1 d-flex align-items-center justify-content-center gap-2" disabled={submitting}>
               {submitting ? (
                 <>
                   <span className="spinner-border spinner-border-sm" aria-hidden="true" /> Signing in…
@@ -168,7 +176,7 @@ export function LoginPage() {
             </button>
           </form>
 
-          <p className="small text-body-secondary mt-4 mb-0">
+          <p className="fs-xs text-muted-2 mt-4 mb-0">
             Accounts lock for 15 minutes after 5 failed attempts. Contact your platform administrator if you cannot sign in.
           </p>
         </div>
