@@ -356,3 +356,18 @@ h1, h2, h3, h4, h5, h6 { letter-spacing: -0.01em; }
   .nxt-stat-value { font-size: 1.15rem; }
   .nxt-stat-label, .nxt-stat-hint { font-size: 0.72rem; }
 }
+
+/* ---------- Captive portal (public, mobile-first) ---------- */
+.nxt-portal { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; background: #f3f4f8 center / cover no-repeat; }
+.nxt-portal-card { width: 100%; max-width: 420px; background: #fff; border: 1px solid var(--nxt-border); border-radius: 18px; box-shadow: var(--nxt-shadow-lg); padding: 1.75rem 1.5rem; }
+.nxt-portal-head { text-align: center; margin-bottom: 1.25rem; }
+.nxt-portal-logo { max-height: 64px; max-width: 180px; object-fit: contain; margin-bottom: 0.75rem; }
+.nxt-portal-logo-fallback { width: 60px; height: 60px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #fff; background: var(--portal); margin-bottom: 0.75rem; }
+.nxt-portal-methods { display: flex; gap: 0.35rem; padding: 0.25rem; background: #f3f4f6; border-radius: 12px; margin-bottom: 1.25rem; overflow-x: auto; scrollbar-width: none; }
+.nxt-portal-methods::-webkit-scrollbar { display: none; }
+.nxt-portal-method { flex: 1 0 auto; border: 0; background: transparent; padding: 0.55rem 0.75rem; border-radius: 9px; font-size: 0.85rem; font-weight: 500; color: var(--nxt-muted); white-space: nowrap; min-height: 40px; }
+.nxt-portal-method.is-active { background: #fff; color: var(--nxt-text); box-shadow: var(--nxt-shadow-sm); }
+.nxt-portal-submit { background: var(--portal); border-color: var(--portal); min-height: 48px; }
+.nxt-portal-submit:hover, .nxt-portal-submit:focus { background: var(--portal); border-color: var(--portal); filter: brightness(0.92); }
+.nxt-portal .form-control-lg { font-size: 1rem; min-height: 48px; }
+@media (max-width: 400px) { .nxt-portal { padding: 0; align-items: stretch; } .nxt-portal-card { border-radius: 0; border: 0; min-height: 100vh; } }

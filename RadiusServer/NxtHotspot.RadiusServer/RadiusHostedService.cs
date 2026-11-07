@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NxtHotspot.Radius.Application;
 
@@ -39,6 +40,7 @@ public sealed class RadiusHostedService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await WarmUpAsync(stoppingToken);
         var address = IPAddress.Parse(_options.ListenAddress);
         using var auth = new UdpClient(new IPEndPoint(address, _options.AuthPort));
         using var acct = new UdpClient(new IPEndPoint(address, _options.AcctPort));
@@ -49,6 +51,31 @@ public sealed class RadiusHostedService : BackgroundService
         var tasks = new List<Task> { ReceiveAsync(auth, false, stoppingToken), ReceiveAsync(acct, true, stoppingToken) };
         tasks.AddRange(Enumerable.Range(0, workers).Select(_ => WorkAsync(stoppingToken)));
         await Task.WhenAll(tasks);
+    }
+
+    /// <summary>
+    /// Builds the EF Core model and opens database connections before the sockets are bound, so the first
+    /// Access-Request after a restart is answered within the NAS timeout instead of paying the cold-start cost.
+    /// </summary>
+    private async Task WarmUpAsync(CancellationToken ct)
+    {
+        var started = DateTime.UtcNow;
+        try
+        {
+            await using var scope = _scopes.CreateAsyncScope();
+            var db = scope.ServiceProvider.GetRequiredService<NxtHotspot.Infrastructure.Persistence.NxtDbContext>();
+            var probe = Guid.NewGuid();
+            await db.NasDevices.AsNoTracking().AnyAsync(n => n.IpAddress == "0.0.0.0", ct);
+            await db.RadiusCredentials.AsNoTracking().AnyAsync(c => c.Username == "warm-up", ct);
+            await db.Subscribers.AsNoTracking().AnyAsync(x => x.OrganizationId == probe && x.NormalizedIdentifier == "WARM-UP", ct);
+            await db.Organizations.AsNoTracking().Include(o => o.Settings).AnyAsync(o => o.Id == probe, ct);
+            await db.RadiusSessions.AsNoTracking().AnyAsync(x => x.SubscriberId == probe, ct);
+            _logger.LogInformation("Database warm-up completed in {Ms} ms", (int)(DateTime.UtcNow - started).TotalMilliseconds);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogWarning(ex, "Database warm-up failed; continuing (first requests may be slow)");
+        }
     }
 
     private async Task ReceiveAsync(UdpClient socket, bool accounting, CancellationToken ct)

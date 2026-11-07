@@ -44,6 +44,9 @@ public static class DependencyInjection
         services.AddScoped<IPackageService, PackageService>();
         services.AddScoped<ISubscriberGroupService, SubscriberGroupService>();
         services.AddScoped<ISubscriberService, SubscriberService>();
+        services.AddHttpClient("sms", c => c.Timeout = TimeSpan.FromSeconds(15));
+        services.AddScoped<ISmsSender, SmsSender>();
+        services.AddScoped<IPortalService, PortalService>();
         services.AddScoped<ISessionService, SessionService>();
         services.AddScoped<IUsageReportService, UsageReportService>();
         services.AddScoped<IRadiusMonitorService, RadiusMonitorService>();

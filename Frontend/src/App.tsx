@@ -17,6 +17,7 @@ import { PlatformSmsPage } from './pages/platform/PlatformSmsPage';
 import { SitesDirectoryPage } from './pages/sites/SitesDirectoryPage';
 import { WalletDetailPage, WalletsPage } from './pages/wallets/WalletsPage';
 import { AuthenticationPage, BrandingPage, GroupsPage, NasPage, OrgSitesPage, PackagesPage, SmsPage, SubscribersPage } from './pages/org/OrgPages';
+import { PortalPage } from './pages/portal/PortalPage';
 import { Permissions as P } from './types/permissions';
 
 const guard = (el: React.ReactNode, anyOf: string[] = [], opts: { platformOnly?: boolean; organizationOnly?: boolean } = {}) => (
@@ -24,6 +25,8 @@ const guard = (el: React.ReactNode, anyOf: string[] = [], opts: { platformOnly?:
 );
 
 const router = createBrowserRouter([
+  // Public captive portal for hotspot visitors (no admin session involved).
+  { path: '/p/:key', element: <PortalPage /> },
   {
     element: <PublicOnlyRoute />,
     children: [{ path: '/login', element: <LoginPage /> }],

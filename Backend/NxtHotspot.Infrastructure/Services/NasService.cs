@@ -122,7 +122,9 @@ public sealed class NasService : INasService
         {
             "Generated from RouterOS documentation. It has not been verified against your router model and RouterOS build: test before production use.",
             "The router's source IP must match the NAS IP address saved in NXT, otherwise requests are dropped.",
-            "Point the hotspot login page at the portal URL shown when you generate a portal key.",
+            "Captive portal: generate a portal key, then replace the router's hotspot/login.html with a page that redirects to " +
+                "<PORTAL_URL>?mac=$(mac)&ip=$(ip)&link-login-only=$(link-login-only)&dst=$(link-orig-esc) (MikroTik variables). " +
+                "After sign-in the portal posts a one-time username/password to link-login-only.",
         };
         if (string.IsNullOrWhiteSpace(_radius.PublicAddress)) notes.Add("Set Radius:PublicAddress in the API configuration so the server address is filled in automatically.");
         return new RouterConfigDto(nas.Id, v7 ? "v7" : "v6", sb.ToString(), notes);

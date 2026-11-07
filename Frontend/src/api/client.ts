@@ -27,7 +27,8 @@ export function configureApiAuth(tokenGetter: TokenGetter, unauthorizedHandler: 
 const ANONYMOUS_PATHS = ['/api/auth/login'];
 
 function isAnonymous(url: string | undefined): boolean {
-  return !!url && ANONYMOUS_PATHS.some((p) => url.endsWith(p));
+  // Captive-portal calls are public: never attach an admin token, never treat their 401s as session expiry.
+  return !!url && (ANONYMOUS_PATHS.some((p) => url.endsWith(p)) || url.includes('/api/portal/'));
 }
 
 apiClient.interceptors.request.use((config) => {

@@ -71,7 +71,15 @@ try
         o.AddPolicy("login", ctx => RateLimitPartition.GetFixedWindowLimiter(
             ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
             _ => new FixedWindowRateLimiterOptions { PermitLimit = 10, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
+        o.AddPolicy("portal", ctx => RateLimitPartition.GetFixedWindowLimiter(
+            "portal:" + (ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown"),
+            _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
     });
+
+    // Development-only SMS delivery mode must never run in production.
+    if (config.GetValue<string>("Sms:DeliveryMode") is { } smsMode && smsMode.Equals("DevelopmentLog", StringComparison.OrdinalIgnoreCase)
+        && !builder.Environment.IsDevelopment())
+        throw new InvalidOperationException("Sms:DeliveryMode=DevelopmentLog is only allowed in the Development environment.");
 
     var origins = config.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
     if (origins.Length > 0)

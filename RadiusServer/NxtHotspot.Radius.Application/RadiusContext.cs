@@ -61,12 +61,5 @@ internal static class RadiusLog
         Reason = reason?.Length > 300 ? reason[..300] : reason,
     };
 
-    /// <summary>"AA-BB-CC-DD-EE-FF", "aa:bb:…" or "aabb.ccdd.eeff" -> "AA:BB:CC:DD:EE:FF"; null if not a MAC.</summary>
-    public static string? NormalizeMac(string? raw)
-    {
-        if (string.IsNullOrWhiteSpace(raw)) return null;
-        var hex = new string(raw.Where(Uri.IsHexDigit).ToArray());
-        if (hex.Length != 12) return null;
-        return string.Join(":", Enumerable.Range(0, 6).Select(i => hex.Substring(i * 2, 2))).ToUpperInvariant();
-    }
+    public static string? NormalizeMac(string? raw) => NxtHotspot.Infrastructure.Hotspot.AccessPolicy.NormalizeMac(raw);
 }
