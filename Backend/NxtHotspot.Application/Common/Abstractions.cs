@@ -41,6 +41,8 @@ public interface ITenantAccess
     void EnsureOrganization(Guid organizationId);
     /// <summary>Loads the site and verifies organization and site-level access. Throws NotFound/Forbidden.</summary>
     Task<Site> GetAuthorizedSiteAsync(Guid siteId, CancellationToken ct = default);
+    /// <summary>Sites of this organization the caller may see. Null means all of them (platform admins and all-sites admins).</summary>
+    Task<IReadOnlyList<Guid>?> AccessibleSiteIdsAsync(Guid organizationId, CancellationToken ct = default);
 }
 
 public interface IAuthService
@@ -51,7 +53,8 @@ public interface IAuthService
 public interface IOrganizationService
 {
     Task<OrganizationDetailDto> RegisterAsync(RegisterOrganizationRequest request, CancellationToken ct = default);
-    Task<PagedResult<OrganizationSummaryDto>> ListAsync(int page, int pageSize, string? search, CancellationToken ct = default);
+    Task<PagedResult<OrganizationSummaryDto>> ListAsync(int page, int pageSize, string? search, CancellationToken ct = default,
+        OrganizationListFilter? filter = null);
     Task<OrganizationDetailDto> GetAsync(Guid organizationId, CancellationToken ct = default);
     Task SetStatusAsync(Guid organizationId, OrganizationStatus status, CancellationToken ct = default);
     Task<List<OrganizationTypeDto>> ListTypesAsync(bool includeInactive, CancellationToken ct = default);

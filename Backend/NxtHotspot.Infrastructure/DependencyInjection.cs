@@ -34,6 +34,10 @@ public static class DependencyInjection
         services.AddScoped<ISmsSettingResolver, SmsSettingResolver>();
         services.AddScoped<IOrganizationConfigService, OrganizationConfigService>();
         services.AddScoped<IAuditLogService, AuditLogService>();
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IDashboardService, DashboardService>();
+        services.AddScoped<ISiteDirectoryService, SiteDirectoryService>();
+        services.AddScoped<IPlanService, PlanService>();
         services.AddScoped<DbSeeder>();
         return services;
     }

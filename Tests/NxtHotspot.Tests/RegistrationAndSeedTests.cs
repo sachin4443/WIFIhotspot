@@ -10,13 +10,13 @@ namespace NxtHotspot.Tests;
 public class SeedTests
 {
     [Fact]
-    public async Task Seeds_all_fourteen_organization_types_with_default_login_methods()
+    public async Task Seeds_all_seventeen_organization_types_with_default_login_methods()
     {
         var env = await TestEnv.CreateAsync();
         using var db = env.NewDb();
 
         var types = await db.OrganizationTypes.Include(t => t.DefaultLoginMethods).ToListAsync();
-        Assert.Equal(14, types.Count);
+        Assert.Equal(17, types.Count);
         Assert.All(types, t => Assert.NotEmpty(t.DefaultLoginMethods));
 
         var hotel = types.Single(t => t.TypeName == "Hotel");
@@ -42,7 +42,7 @@ public class SeedTests
         await env.SeedAsync();
 
         using var check = env.NewDb();
-        Assert.Equal(14, await check.OrganizationTypes.CountAsync());
+        Assert.Equal(17, await check.OrganizationTypes.CountAsync());
         Assert.False((await check.OrganizationTypes.SingleAsync(t => t.TypeName == "Hostel")).IsActive);
         Assert.Equal(Permissions.All.Count, await check.Permissions.CountAsync());
         Assert.Equal(4, await check.Roles.CountAsync(r => r.OrganizationId == null));

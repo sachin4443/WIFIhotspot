@@ -36,4 +36,14 @@ public sealed class TenantAccess : ITenantAccess
         }
         return site;
     }
+
+    public async Task<IReadOnlyList<Guid>?> AccessibleSiteIdsAsync(Guid organizationId, CancellationToken ct = default)
+    {
+        EnsureOrganization(organizationId);
+        if (_current.IsPlatformAdmin || _current.HasAllSites) return null;
+        var adminId = _current.AdminUserId;
+        return await _db.AdminUserSites.AsNoTracking()
+            .Where(x => x.AdminUserId == adminId && x.Site!.OrganizationId == organizationId)
+            .Select(x => x.SiteId).ToListAsync(ct);
+    }
 }

@@ -35,6 +35,9 @@ public sealed class DbSeeder
         ("Corporate", "Corporate campuses", new[] { AuthenticationType.EmployeePassword, AuthenticationType.MobileOTP, AuthenticationType.Voucher }),
         ("Public WiFi", "Public WiFi zones", new[] { AuthenticationType.MobileOTP, AuthenticationType.Voucher }),
         ("ISP", "Internet service providers", new[] { AuthenticationType.UsernamePassword, AuthenticationType.Voucher, AuthenticationType.MobileOTP }),
+        ("Enterprise", "Enterprises and business campuses", new[] { AuthenticationType.EmployeePassword, AuthenticationType.MobileOTP, AuthenticationType.Voucher }),
+        ("Shopping Mall", "Shopping malls and retail centres", new[] { AuthenticationType.MobileOTP, AuthenticationType.Voucher }),
+        ("Railway / Transport", "Railway stations, airports, bus terminals and transit", new[] { AuthenticationType.MobileOTP, AuthenticationType.Voucher }),
         ("Other", "Other organization types", new[] { AuthenticationType.MobileOTP, AuthenticationType.UsernamePassword, AuthenticationType.Voucher }),
     };
 
@@ -84,10 +87,17 @@ public sealed class DbSeeder
     private async Task SeedPermissionsAndRolesAsync(CancellationToken ct)
     {
         var existingCodes = (await _db.Permissions.Select(p => p.Code).ToListAsync(ct)).ToHashSet();
+        // Permissions added by a newer release are also granted to existing system roles whose defaults include them.
+        // Permissions that already existed are never re-added, so an administrator's removals are respected.
+        var newlyAdded = new HashSet<string>(StringComparer.Ordinal);
         foreach (var (code, description, platformOnly) in Permissions.All)
             if (!existingCodes.Contains(code))
+            {
                 _db.Permissions.Add(new Permission { Code = code, Description = description, IsPlatformOnly = platformOnly });
+                newlyAdded.Add(code);
+            }
         await _db.SaveChangesAsync(ct);
+        var isUpgrade = existingCodes.Count > 0;
 
         var perms = await _db.Permissions.ToListAsync(ct);
         var roles = await _db.Roles.Include(r => r.RolePermissions).Where(r => r.OrganizationId == null).ToListAsync(ct);
@@ -103,8 +113,8 @@ public sealed class DbSeeder
                 roles.Add(role);
                 sync = true;
             }
-            if (!sync) return;
-            foreach (var p in perms.Where(select))
+            var candidates = sync ? perms.Where(select) : isUpgrade ? perms.Where(p => newlyAdded.Contains(p.Code)).Where(select) : Enumerable.Empty<Permission>();
+            foreach (var p in candidates)
                 if (role.RolePermissions.All(rp => rp.PermissionId != p.Id))
                     role.RolePermissions.Add(new RolePermission { PermissionId = p.Id });
         }
@@ -112,8 +122,7 @@ public sealed class DbSeeder
         Ensure(SystemRoles.SuperAdmin, "Platform owner with full access", true, _ => true, alwaysSync: true);
         Ensure(SystemRoles.OrgAdmin, "Organization administrator", false, p => !p.IsPlatformOnly, alwaysSync: true);
         Ensure(SystemRoles.SiteAdmin, "Site-level administrator", false,
-            p => p.Code is Permissions.SitesRead or Permissions.AdminUsersRead or Permissions.WalletRead or Permissions.RolesRead
-                    or Permissions.SettingsRead, alwaysSync: false);
+            p => Permissions.SiteAdminDefaults.Contains(p.Code), alwaysSync: false);
         Ensure(SystemRoles.ReadOnly, "Read-only access", false,
             p => !p.IsPlatformOnly && p.Code.EndsWith(".read", StringComparison.Ordinal), alwaysSync: false);
 

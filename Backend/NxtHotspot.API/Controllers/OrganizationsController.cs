@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NxtHotspot.Application.Common;
 using NxtHotspot.Application.Dtos;
+using NxtHotspot.Domain.Enums;
 
 namespace NxtHotspot.API.Controllers;
 
@@ -15,8 +16,9 @@ public sealed class OrganizationsController : ControllerBase
     [HttpGet]
     [Authorize(Policy = Permissions.OrganizationsRead)]
     public async Task<ActionResult<PagedResult<OrganizationSummaryDto>>> List(
-        [FromQuery] int page = 1, [FromQuery] int pageSize = 25, [FromQuery] string? search = null, CancellationToken ct = default) =>
-        Ok(await _orgs.ListAsync(page, pageSize, search, ct));
+        [FromQuery] int page = 1, [FromQuery] int pageSize = 25, [FromQuery] string? search = null,
+        [FromQuery] OrganizationStatus? status = null, [FromQuery] int? organizationTypeId = null, CancellationToken ct = default) =>
+        Ok(await _orgs.ListAsync(page, pageSize, search, ct, new OrganizationListFilter(status, organizationTypeId)));
 
     [HttpGet("{id:guid}")]
     [Authorize(Policy = Permissions.OrganizationsRead)]
