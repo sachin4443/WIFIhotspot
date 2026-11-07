@@ -1,4 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
+  <PropertyGroup>
+    <UserSecretsId>nxt-hotspot-radius-server</UserSecretsId>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\NxtHotspot.Radius.Application\NxtHotspot.Radius.Application.csproj" />
     <ProjectReference Include="..\..\Backend\NxtHotspot.Infrastructure\NxtHotspot.Infrastructure.csproj" />
@@ -6,6 +9,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.*" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.*" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.*" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.*" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.*" />
     <PackageReference Include="Serilog.Sinks.EventLog" Version="3.*" />
   </ItemGroup>

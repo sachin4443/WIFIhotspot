@@ -8,6 +8,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.*" PrivateAssets="all" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.*" />
+    <!-- Explicit so every consumer (API, RADIUS server, tests) resolves the same Relational version as EF Core. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.*" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.*" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.*" />
   </ItemGroup>

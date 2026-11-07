@@ -44,7 +44,23 @@ public static class DependencyInjection
         services.AddScoped<IPackageService, PackageService>();
         services.AddScoped<ISubscriberGroupService, SubscriberGroupService>();
         services.AddScoped<ISubscriberService, SubscriberService>();
+        services.AddScoped<ISessionService, SessionService>();
+        services.AddScoped<IUsageReportService, UsageReportService>();
+        services.AddScoped<IRadiusMonitorService, RadiusMonitorService>();
         services.AddScoped<DbSeeder>();
+        return services;
+    }
+
+    /// <summary>Minimal registration for the RADIUS server: database, secret protector, password hashing and RADIUS options.</summary>
+    public static IServiceCollection AddRadiusDataAccess(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("NxtHotspot")
+            ?? throw new InvalidOperationException("ConnectionStrings:NxtHotspot is not configured.");
+        services.Configure<SecurityOptions>(configuration.GetSection("Security"));
+        services.Configure<Hotspot.RadiusOptions>(configuration.GetSection("Radius"));
+        services.AddDbContext<NxtDbContext>(o => o.UseNpgsql(connectionString));
+        services.AddSingleton<ISecretProtector, AesGcmSecretProtector>();
+        services.AddSingleton<IPasswordService, PasswordService>();
         return services;
     }
 }

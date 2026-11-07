@@ -18,5 +18,7 @@
     <ProjectReference Include="..\..\Backend\NxtHotspot.Application\NxtHotspot.Application.csproj" />
     <ProjectReference Include="..\..\Backend\NxtHotspot.Infrastructure\NxtHotspot.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Backend\NxtHotspot.API\NxtHotspot.API.csproj" />
+    <ProjectReference Include="..\..\RadiusServer\NxtHotspot.RadiusProtocol\NxtHotspot.RadiusProtocol.csproj" />
+    <ProjectReference Include="..\..\RadiusServer\NxtHotspot.Radius.Application\NxtHotspot.Radius.Application.csproj" />
   </ItemGroup>
 </Project>
