@@ -16,6 +16,7 @@ import { PlansPage } from './pages/platform/PlansPage';
 import { PlatformSmsPage } from './pages/platform/PlatformSmsPage';
 import { SitesDirectoryPage } from './pages/sites/SitesDirectoryPage';
 import { WalletDetailPage, WalletsPage } from './pages/wallets/WalletsPage';
+import { AuthenticationPage, BrandingPage, GroupsPage, NasPage, OrgSitesPage, PackagesPage, SmsPage, SubscribersPage } from './pages/org/OrgPages';
 import { Permissions as P } from './types/permissions';
 
 const guard = (el: React.ReactNode, anyOf: string[] = [], opts: { platformOnly?: boolean; organizationOnly?: boolean } = {}) => (
@@ -41,6 +42,14 @@ const router = createBrowserRouter([
           { path: 'subscription-plans', element: guard(<PlansPage />, [P.SubscriptionPlansRead], { platformOnly: true }) },
           { path: 'platform-sms', element: guard(<PlatformSmsPage />, [P.PlatformSmsWrite], { platformOnly: true }) },
           { path: 'all-sites', element: guard(<SitesDirectoryPage />, [P.SitesRead], { platformOnly: true }) },
+          { path: 'sites', element: guard(<OrgSitesPage />, [P.SitesRead], { organizationOnly: true }) },
+          { path: 'nas', element: guard(<NasPage />, [P.NasRead], { organizationOnly: true }) },
+          { path: 'packages', element: guard(<PackagesPage />, [P.PackagesRead], { organizationOnly: true }) },
+          { path: 'subscribers', element: guard(<SubscribersPage />, [P.SubscribersRead], { organizationOnly: true }) },
+          { path: 'groups', element: guard(<GroupsPage />, [P.SubscribersRead], { organizationOnly: true }) },
+          { path: 'authentication', element: guard(<AuthenticationPage />, [P.SettingsRead], { organizationOnly: true }) },
+          { path: 'sms', element: guard(<SmsPage />, [P.SettingsRead], { organizationOnly: true }) },
+          { path: 'branding', element: guard(<BrandingPage />, [P.SettingsRead], { organizationOnly: true }) },
           { path: 'administrators', element: guard(<AdminUsersPage />, [P.AdminUsersRead]) },
           { path: 'roles', element: guard(<RolesPage />, [P.RolesRead]) },
           { path: 'wallets', element: guard(<WalletsPage />, [P.WalletRead]) },

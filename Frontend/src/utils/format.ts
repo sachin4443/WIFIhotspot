@@ -75,3 +75,15 @@ export const formatKbps = (kbps: number | null | undefined) =>
 
 /** "SiteCreated" -> "Site created" */
 export const humanize = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase()).replace(/ ([A-Z])(?=[a-z])/g, (m) => m.toLowerCase());
+
+/** ISO (UTC) -> value for <input type="datetime-local"> in local time. */
+export function toLocalInput(iso: string | null | undefined): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+/** <input type="datetime-local"> value (local) -> ISO UTC, or null. */
+export const fromLocalInput = (v: string): string | null => (v ? new Date(v).toISOString() : null);

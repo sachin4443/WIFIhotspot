@@ -14,6 +14,9 @@ import { useApi } from '../../hooks/useApi';
 import { AdminUsersPanel } from '../../panels/AdminUsersPanel';
 import { BrandingPanel } from '../../panels/BrandingPanel';
 import { LoginMethodsPanel } from '../../panels/LoginMethodsPanel';
+import { NasPanel } from '../../panels/NasPanel';
+import { PackagesPanel } from '../../panels/PackagesPanel';
+import { SubscribersPanel } from '../../panels/SubscribersPanel';
 import { ProfilePanel } from '../../panels/ProfilePanel';
 import { SettingsPanel } from '../../panels/SettingsPanel';
 import { SitesPanel } from '../../panels/SitesPanel';
@@ -25,7 +28,7 @@ import { Permissions } from '../../types/permissions';
 import { formatDate, formatMoney } from '../../utils/format';
 import { OrganizationOverview } from './OrganizationOverview';
 
-type TabKey = 'overview' | 'profile' | 'sites' | 'admins' | 'login' | 'sms' | 'settings' | 'branding' | 'wallet';
+type TabKey = 'overview' | 'profile' | 'sites' | 'nas' | 'packages' | 'subscribers' | 'admins' | 'login' | 'sms' | 'settings' | 'branding' | 'wallet';
 
 export function OrganizationDetailPage() {
   const { id = '' } = useParams();
@@ -106,6 +109,9 @@ export function OrganizationDetailPage() {
           { key: 'overview', label: 'Overview' },
           { key: 'profile', label: 'Profile' },
           { key: 'sites', label: 'Sites' },
+          { key: 'nas', label: 'NAS devices', hidden: !hasPermission(Permissions.NasRead) },
+          { key: 'packages', label: 'Packages', hidden: !hasPermission(Permissions.PackagesRead) },
+          { key: 'subscribers', label: 'Subscribers', hidden: !hasPermission(Permissions.SubscribersRead) },
           { key: 'admins', label: 'Administrators', hidden: !hasPermission(Permissions.AdminUsersRead) },
           { key: 'login', label: 'Login methods' },
           { key: 'sms', label: 'SMS' },
@@ -135,6 +141,9 @@ export function OrganizationDetailPage() {
       )}
       {tab === 'profile' && <ProfilePanel organizationId={o.id} canEdit={canSettings} onSaved={org.reload} />}
       {tab === 'sites' && <SitesPanel organizationId={o.id} canWrite={hasPermission(Permissions.SitesWrite)} onChanged={refresh} />}
+      {tab === 'nas' && <NasPanel organizationId={o.id} canWrite={hasPermission(Permissions.NasWrite)} />}
+      {tab === 'packages' && <PackagesPanel organizationId={o.id} canWrite={hasPermission(Permissions.PackagesWrite)} />}
+      {tab === 'subscribers' && <SubscribersPanel organizationId={o.id} organizationTypeName={o.organizationTypeName} canWrite={hasPermission(Permissions.SubscribersWrite)} />}
       {tab === 'admins' && <AdminUsersPanel organizationId={o.id} canWrite={hasPermission(Permissions.AdminUsersWrite)} />}
       {tab === 'login' && <LoginMethodsPanel organizationId={o.id} canEdit={canSettings} />}
       {tab === 'sms' && <SmsPanel organizationId={o.id} canEdit={canSettings} />}

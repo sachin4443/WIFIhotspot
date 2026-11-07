@@ -1,5 +1,5 @@
 import type { IconType } from 'react-icons';
-import { FiActivity, FiBriefcase, FiCreditCard, FiGrid, FiLayers, FiMapPin, FiMessageSquare, FiShield, FiTag, FiUsers } from 'react-icons/fi';
+import { FiActivity, FiBriefcase, FiCreditCard, FiDroplet, FiGrid, FiKey, FiLayers, FiMapPin, FiMessageSquare, FiPackage, FiRadio, FiShield, FiTag, FiUserCheck, FiUsers } from 'react-icons/fi';
 import { Permissions as P } from '../../types/permissions';
 
 export type NavScope = 'platform' | 'organization' | 'all';
@@ -30,6 +30,30 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: 'Organizations', path: '/organizations', icon: FiBriefcase, anyOf: [P.OrganizationsRead], scope: 'platform' },
       { label: 'Sites', path: '/all-sites', icon: FiMapPin, anyOf: [P.SitesRead], scope: 'platform' },
       { label: 'Wallets', path: '/wallets', icon: FiCreditCard, anyOf: [P.WalletRead], scope: 'platform' },
+    ],
+  },
+  {
+    title: 'Network',
+    items: [
+      { label: 'Sites', path: '/sites', icon: FiMapPin, anyOf: [P.SitesRead], scope: 'organization' },
+      { label: 'NAS devices', path: '/nas', icon: FiRadio, anyOf: [P.NasRead], scope: 'organization' },
+    ],
+  },
+  {
+    title: 'Hotspot users',
+    items: [
+      { label: 'Subscribers', path: '/subscribers', icon: FiUserCheck, anyOf: [P.SubscribersRead], scope: 'organization' },
+      { label: 'Groups & policies', path: '/groups', icon: FiLayers, anyOf: [P.SubscribersRead], scope: 'organization' },
+      { label: 'Internet packages', path: '/packages', icon: FiPackage, anyOf: [P.PackagesRead], scope: 'organization' },
+    ],
+  },
+  {
+    title: 'Configuration',
+    items: [
+      { label: 'Authentication', path: '/authentication', icon: FiKey, anyOf: [P.SettingsRead], scope: 'organization' },
+      { label: 'SMS provider', path: '/sms', icon: FiMessageSquare, anyOf: [P.SettingsRead], scope: 'organization' },
+      { label: 'Branding', path: '/branding', icon: FiDroplet, anyOf: [P.SettingsRead], scope: 'organization' },
+      { label: 'Wallet', path: '/wallets', icon: FiCreditCard, anyOf: [P.WalletRead], scope: 'organization' },
     ],
   },
   {
