@@ -195,7 +195,7 @@ h1, h2, h3, h4, h5, h6 { letter-spacing: -0.01em; }
 .nxt-search .form-control { padding-left: 2.2rem; }
 
 /* ---------- Tables ---------- */
-.nxt-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.nxt-table-wrap { position: relative; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .nxt-table { width: 100%; margin: 0; font-size: 0.875rem; border-collapse: separate; border-spacing: 0; }
 .nxt-table th { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--nxt-muted); background: var(--nxt-surface-muted); padding: 0.65rem 1rem; border-bottom: 1px solid var(--nxt-border); white-space: nowrap; text-align: left; }
 .nxt-table td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--nxt-border); vertical-align: middle; }
@@ -347,4 +347,12 @@ h1, h2, h3, h4, h5, h6 { letter-spacing: -0.01em; }
 
 @media (prefers-reduced-motion: reduce) {
   .nxt-sidebar, .nxt-spin { transition: none !important; animation: none !important; }
+}
+
+/* Compact stat tiles in two columns on phones */
+@media (max-width: 575.98px) {
+  .nxt-stat { flex-direction: column; gap: 0.55rem; padding: 0.85rem; }
+  .nxt-stat-icon { width: 34px; height: 34px; font-size: 1rem; border-radius: 8px; }
+  .nxt-stat-value { font-size: 1.15rem; }
+  .nxt-stat-label, .nxt-stat-hint { font-size: 0.72rem; }
 }
