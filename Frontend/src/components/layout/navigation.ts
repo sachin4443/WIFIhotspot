@@ -1,5 +1,5 @@
 import type { IconType } from 'react-icons';
-import { FiActivity, FiBriefcase, FiCreditCard, FiDroplet, FiGrid, FiKey, FiLayers, FiMapPin, FiMessageSquare, FiPackage, FiRadio, FiShield, FiTag, FiUserCheck, FiUsers } from 'react-icons/fi';
+import { FiActivity, FiBriefcase, FiCreditCard, FiDroplet, FiGrid, FiKey, FiLayers, FiMapPin, FiMessageSquare, FiPackage, FiRadio, FiShield, FiTag, FiUserCheck, FiUsers, FiWifi, FiDatabase, FiBarChart2, FiServer } from 'react-icons/fi';
 import { Permissions as P } from '../../types/permissions';
 
 export type NavScope = 'platform' | 'organization' | 'all';
@@ -45,6 +45,15 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: 'Subscribers', path: '/subscribers', icon: FiUserCheck, anyOf: [P.SubscribersRead], scope: 'organization' },
       { label: 'Groups & policies', path: '/groups', icon: FiLayers, anyOf: [P.SubscribersRead], scope: 'organization' },
       { label: 'Internet packages', path: '/packages', icon: FiPackage, anyOf: [P.PackagesRead], scope: 'organization' },
+    ],
+  },
+  {
+    title: 'Sessions & usage',
+    items: [
+      { label: 'Active sessions', path: '/active-sessions', icon: FiWifi, anyOf: [P.SessionsRead], scope: 'all' },
+      { label: 'Accounting', path: '/accounting', icon: FiDatabase, anyOf: [P.SessionsRead], scope: 'all' },
+      { label: 'Usage reports', path: '/reports', icon: FiBarChart2, anyOf: [P.ReportsRead], scope: 'all' },
+      { label: 'RADIUS monitor', path: '/radius', icon: FiServer, anyOf: [P.SessionsRead], scope: 'all' },
     ],
   },
   {

@@ -18,6 +18,10 @@ import { SitesDirectoryPage } from './pages/sites/SitesDirectoryPage';
 import { WalletDetailPage, WalletsPage } from './pages/wallets/WalletsPage';
 import { AuthenticationPage, BrandingPage, GroupsPage, NasPage, OrgSitesPage, PackagesPage, SmsPage, SubscribersPage } from './pages/org/OrgPages';
 import { PortalPage } from './pages/portal/PortalPage';
+import { AccountingPage } from './pages/sessions/AccountingPage';
+import { ActiveSessionsPage } from './pages/sessions/ActiveSessionsPage';
+import { RadiusMonitorPage } from './pages/sessions/RadiusMonitorPage';
+import { UsageReportsPage } from './pages/sessions/UsageReportsPage';
 import { Permissions as P } from './types/permissions';
 
 const guard = (el: React.ReactNode, anyOf: string[] = [], opts: { platformOnly?: boolean; organizationOnly?: boolean } = {}) => (
@@ -53,6 +57,10 @@ const router = createBrowserRouter([
           { path: 'authentication', element: guard(<AuthenticationPage />, [P.SettingsRead], { organizationOnly: true }) },
           { path: 'sms', element: guard(<SmsPage />, [P.SettingsRead], { organizationOnly: true }) },
           { path: 'branding', element: guard(<BrandingPage />, [P.SettingsRead], { organizationOnly: true }) },
+          { path: 'active-sessions', element: guard(<ActiveSessionsPage />, [P.SessionsRead]) },
+          { path: 'accounting', element: guard(<AccountingPage />, [P.SessionsRead]) },
+          { path: 'reports', element: guard(<UsageReportsPage />, [P.ReportsRead]) },
+          { path: 'radius', element: guard(<RadiusMonitorPage />, [P.SessionsRead]) },
           { path: 'administrators', element: guard(<AdminUsersPage />, [P.AdminUsersRead]) },
           { path: 'roles', element: guard(<RolesPage />, [P.RolesRead]) },
           { path: 'wallets', element: guard(<WalletsPage />, [P.WalletRead]) },
