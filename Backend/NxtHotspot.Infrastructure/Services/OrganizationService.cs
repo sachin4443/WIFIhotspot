@@ -152,7 +152,8 @@ public sealed class OrganizationService : IOrganizationService
         return await BuildDetailAsync(org.Id, ct);
     }
 
-    public async Task<PagedResult<OrganizationSummaryDto>> ListAsync(int page, int pageSize, string? search, CancellationToken ct = default)
+    public async Task<PagedResult<OrganizationSummaryDto>> ListAsync(int page, int pageSize, string? search, CancellationToken ct = default,
+        OrganizationListFilter? filter = null)
     {
         page = Math.Max(1, page);
         pageSize = Math.Clamp(pageSize, 1, 100);
@@ -166,8 +167,10 @@ public sealed class OrganizationService : IOrganizationService
         if (!string.IsNullOrWhiteSpace(search))
         {
             var s = search.Trim().ToLower();
-            q = q.Where(o => o.Name.ToLower().Contains(s));
+            q = q.Where(o => o.Name.ToLower().Contains(s) || o.Email.ToLower().Contains(s) || o.ContactPerson.ToLower().Contains(s));
         }
+        if (filter?.Status is { } status) q = q.Where(o => o.Status == status);
+        if (filter?.OrganizationTypeId is { } typeId) q = q.Where(o => o.OrganizationTypeId == typeId);
 
         var total = await q.CountAsync(ct);
         var items = await q.OrderBy(o => o.Name).Skip((page - 1) * pageSize).Take(pageSize)

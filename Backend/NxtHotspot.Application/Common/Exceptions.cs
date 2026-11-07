@@ -13,3 +13,4 @@ public sealed class InsufficientBalanceException(string message) : AppException(
 public sealed class ForbiddenException(string message = "You do not have access to this resource.") : AppException(message, 403);
 public sealed class NotFoundException(string message) : AppException(message, 404);
 public sealed class ConflictException(string message) : AppException(message, 409);
+public sealed class ServiceUnavailableException(string message) : AppException(message, 503);

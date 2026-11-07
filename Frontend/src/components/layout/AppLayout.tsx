@@ -1,30 +1,39 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router';
+import { useAuth } from '../../auth/useAuth';
+import { useWorkspace } from '../../workspace/useWorkspace';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
+import { titleForPath } from './navigation';
 
-const DESKTOP_QUERY = '(min-width: 992px)';
-
-/** Authenticated application shell: sidebar + top bar + routed page. */
+/** Authenticated shell: light sidebar (drawer below 992px) + top bar + routed page. */
 export function AppLayout() {
   const location = useLocation();
-  // Desktop: sidebar can be collapsed. Mobile: sidebar is an overlay that starts closed.
-  const [collapsed, setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
+  const { organization } = useWorkspace();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  useEffect(() => setMobileOpen(false), [location.pathname]);
+  useEffect(() => setDrawerOpen(false), [location.pathname]);
 
-  const toggle = () => {
-    if (window.matchMedia(DESKTOP_QUERY).matches) setCollapsed((v) => !v);
-    else setMobileOpen((v) => !v);
-  };
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setDrawerOpen(false); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [drawerOpen]);
+
+  const title = titleForPath(location.pathname);
+  useEffect(() => { document.title = `${title} · NXT Hotspot`; }, [title]);
+
+  const contextLabel = user?.isPlatformAdmin ? 'Workspace' : 'Organization';
+  const contextValue = user?.isPlatformAdmin ? 'Platform administration' : organization?.name ?? 'Loading…';
 
   return (
-    <div className={`nxt-shell ${collapsed ? 'is-collapsed' : ''}`}>
-      <Sidebar open={mobileOpen} onNavigate={() => setMobileOpen(false)} />
-      {mobileOpen && <div className="nxt-backdrop" onClick={() => setMobileOpen(false)} aria-hidden="true" />}
+    <div className="nxt-shell">
+      <Sidebar open={drawerOpen} onClose={() => setDrawerOpen(false)} contextLabel={contextLabel} contextValue={contextValue} />
+      {drawerOpen && <div className="nxt-backdrop d-lg-none" onClick={() => setDrawerOpen(false)} aria-hidden="true" />}
       <div className="nxt-main">
-        <Topbar onToggleSidebar={toggle} />
+        <Topbar onOpenSidebar={() => setDrawerOpen(true)} title={title} />
         <main className="nxt-content" id="main-content">
           <Outlet />
         </main>

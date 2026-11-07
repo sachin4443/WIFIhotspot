@@ -83,12 +83,12 @@ function ToastView({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: num
       aria-atomic="true"
     >
       <div className="d-flex align-items-start gap-2 p-3">
-        <span className={`nxt-toast-icon text-${toast.variant}`} aria-hidden="true">
+        <span className="nxt-toast-icon" aria-hidden="true">
           {ICONS[toast.variant]}
         </span>
         <div className="flex-grow-1 min-w-0">
           <div className="fw-semibold small">{toast.title ?? DEFAULT_TITLES[toast.variant]}</div>
-          <div className="small text-body-secondary text-break">{toast.message}</div>
+          <div className="fs-sm text-muted-2 text-break">{toast.message}</div>
         </div>
         <button type="button" className="btn-close btn-sm" aria-label="Close" onClick={() => onDismiss(toast.id)} />
       </div>

@@ -3,5 +3,6 @@
     <ProjectReference Include="..\NxtHotspot.RadiusProtocol\NxtHotspot.RadiusProtocol.csproj" />
     <ProjectReference Include="..\..\Backend\NxtHotspot.Application\NxtHotspot.Application.csproj" />
     <ProjectReference Include="..\..\Backend\NxtHotspot.Domain\NxtHotspot.Domain.csproj" />
+    <ProjectReference Include="..\..\Backend\NxtHotspot.Infrastructure\NxtHotspot.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

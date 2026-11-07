@@ -14,10 +14,21 @@ export const Permissions = {
   OrganizationTypesRead: 'organizationtypes.read',
   OrganizationTypesWrite: 'organizationtypes.write',
   SubscriptionPlansRead: 'subscriptionplans.read',
+  SubscriptionPlansWrite: 'subscriptionplans.write',
   SettingsRead: 'settings.read',
   SettingsWrite: 'settings.write',
   AuditRead: 'audit.read',
   PlatformSmsWrite: 'platform.sms.write',
+  NasRead: 'nas.read',
+  NasWrite: 'nas.write',
+  PackagesRead: 'packages.read',
+  PackagesWrite: 'packages.write',
+  SubscribersRead: 'subscribers.read',
+  SubscribersWrite: 'subscribers.write',
+  SessionsRead: 'sessions.read',
+  SessionsDisconnect: 'sessions.disconnect',
+  ReportsRead: 'reports.read',
+  RadiusMonitor: 'radius.monitor',
 } as const;
 
 export type PermissionCode = (typeof Permissions)[keyof typeof Permissions];
