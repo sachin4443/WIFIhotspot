@@ -38,6 +38,12 @@ public static class DependencyInjection
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<ISiteDirectoryService, SiteDirectoryService>();
         services.AddScoped<IPlanService, PlanService>();
+        services.Configure<Hotspot.RadiusOptions>(configuration.GetSection("Radius"));
+        services.AddScoped<IDisconnectQueue, DisconnectQueue>();
+        services.AddScoped<INasService, NasService>();
+        services.AddScoped<IPackageService, PackageService>();
+        services.AddScoped<ISubscriberGroupService, SubscriberGroupService>();
+        services.AddScoped<ISubscriberService, SubscriberService>();
         services.AddScoped<DbSeeder>();
         return services;
     }
